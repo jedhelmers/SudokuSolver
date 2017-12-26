@@ -91,7 +91,7 @@ class sudoku:
             if len(self.squares[row][col]) == 1 :
                 #This cell is now definate..
                 #Need to update its friends...
-                #print "After exluding %i, square (%i,%i) must be %i" \
+                ##print "After exluding %i, square (%i,%i) must be %i" \
                 #% (x, self.row, self.col, self[0])
                 self._changed=True
                 self.update_neighbours(row,col,self.squares[row][col][0])
@@ -113,7 +113,7 @@ class sudoku:
     def update_neighbours(self,set_row,set_col,x) :
         """Call this when the square is set to x, either directly,
         or as a side effect of an exclude leaving only one entry"""
-        #print "Updating (%i,%i) to be %i..."  % (self.row, self.col, x)
+        ##print "Updating (%i,%i) to be %i..."  % (self.row, self.col, x)
         #Update the possibilies in this row...
         for row in range(0,9) :
             if row <> set_row :
@@ -133,7 +133,7 @@ class sudoku:
         for row in rows :
             for col in cols :
                 assert row <> set_row or col <> set_col
-                #print "Updating (%i,%i) to be %i, excluding %i from (%i, %i)" \
+                ##print "Updating (%i,%i) to be %i, excluding %i from (%i, %i)" \
                 #% (self.row, self.col, x, x, row, col)
                 self.cell_exclude(row,col,x)
 
@@ -195,7 +195,7 @@ class sudoku:
     def check(self, level=0) :
         self._changed=True
         while self._changed:
-            #print "checking..."
+            ##print "checking..."
             self._changed=False
             self.check_for_single_occurances()
             self.check_for_last_in_row_col_3x3()
@@ -255,7 +255,7 @@ class sudoku:
 
                     #assert x not in known_values
 
-                    #print "Because its the last cell in its row/col/3x3 entry (%i,%i) must be %i" \
+                    ##print "Because its the last cell in its row/col/3x3 entry (%i,%i) must be %i" \
                     #% (row,col,x)
                     self.set_cell(row,col,x)
         """
@@ -301,18 +301,18 @@ class sudoku:
         #Want to see if x only occurs once in this row/col/3x3...
         for check_list in TxT_ITER :
             for x in range(1,9+1) : #1 to 9 inclusive
-                #print "Checking %i in 3x3" % x, check_list
+                ##print "Checking %i in 3x3" % x, check_list
                 rows_for_x = []
                 cols_for_x = []
                 for (row,col) in check_list :
                     if x in self.squares[row][col] :
-                        #print "Found possible %i at (%i,%i)" % (x, row, col)
+                        ##print "Found possible %i at (%i,%i)" % (x, row, col)
                         if row not in rows_for_x : rows_for_x.append(row)
                         if col not in cols_for_x : cols_for_x.append(col)
                 #Are they all in the same row?
                 if len(rows_for_x)==1 and len(cols_for_x) > 1 :
-                    #print "%i must be in row %i using cols %s" % (x, rows_for_x[0]+1, ",".join(map(lambda i : str(i+1),cols_for_x)))
-                    #print self
+                    ##print "%i must be in row %i using cols %s" % (x, rows_for_x[0]+1, ",".join(map(lambda i : str(i+1),cols_for_x)))
+                    ##print self
                     #This means, we can remove X from all the rest of the row...
                     row = rows_for_x[0]
                     for col in range(0,9) :
@@ -325,8 +325,8 @@ class sudoku:
                                 self.cell_exclude(row,col,x)
                 #Are they all in the same col?
                 if len(cols_for_x)==1 and len(rows_for_x) > 1 :
-                    #print "%i must be in col %i using rows %s" % (x, cols_for_x[0]+1, ",".join(map(lambda i : str(i+1),rows_for_x)))
-                    #print self
+                    ##print "%i must be in col %i using rows %s" % (x, cols_for_x[0]+1, ",".join(map(lambda i : str(i+1),rows_for_x)))
+                    ##print self
                     #This means, we can remove X from all the rest of the row...
                     col = cols_for_x[0]
                     for row in range(0,9) :
@@ -349,13 +349,13 @@ class sudoku:
         progress=True
         while progress :
             progress=False
-            #print "Doing one level supposition..."
+            ##print "Doing one level supposition..."
             for row in range(0,9) :
                 for col in range(0,9):
                     if len(self.squares[row][col]) > 1 :
                         bad_x = []
                         for x in self.squares[row][col] :
-                            #print "/-- Trying setting (%i,%i) to %i" % (row,col,x)
+                            ##print "/-- Trying setting (%i,%i) to %i" % (row,col,x)
                             sudoku_copy = self.copy()
                             try:
                                 sudoku_copy.set_cell(row,col,x)
@@ -363,11 +363,11 @@ class sudoku:
                             except AssertionError, e :
                                 #Leads to an error :)
                                 #This means that this square cannot be x
-                                #print e
-                                #print "%s cannot be %i" % (str(self.squares[row][col]), x)
+                                ##print e
+                                ##print "%s cannot be %i" % (str(self.squares[row][col]), x)
                                 bad_x.append(x)
                             del sudoku_copy
-                            #print "\-- End of exp"
+                            ##print "\-- End of exp"
                         if len(bad_x) == 0 :
                             pass
                         elif len(bad_x) < len(self.squares[row][col]) :
@@ -378,19 +378,19 @@ class sudoku:
                         else :
                             assert False, "Bugger! All possible values for square (%i,%i) fail" \
                             % (row,col)
-        #print "One level supposition done"
+        ##print "One level supposition done"
 
     def two_level_supposition(self) :
         progress=True
         while progress :
             progress=False
-            #print "Doing two level supposition..."
+            ##print "Doing two level supposition..."
             for row in range(0,9) :
                 for col in range(0,9):
                     if len(self.squares[row][col]) > 1 :
                         bad_x = []
                         for x in self.squares[row][col] :
-                            #print "/-- Trying setting (%i,%i) to %i" % (row,col,x)
+                            ##print "/-- Trying setting (%i,%i) to %i" % (row,col,x)
                             sudoku_copy = self.copy()
                             try:
                                 sudoku_copy.set_cell(row,col,x)
@@ -400,11 +400,11 @@ class sudoku:
                             except AssertionError, e :
                                 #Leads to an error :)
                                 #This means that this square cannot be x
-                                #print e
-                                #print "%s cannot be %i" % (str(self.squares[row][col]), x)
+                                ##print e
+                                ##print "%s cannot be %i" % (str(self.squares[row][col]), x)
                                 bad_x.append(x)
                             del sudoku_copy
-                            #print "\-- End of exp"
+                            ##print "\-- End of exp"
                         if len(bad_x) == 0 :
                             pass
                         elif len(bad_x) < len(self.squares[row][col]) :
@@ -415,10 +415,10 @@ class sudoku:
                         else :
                             assert False, "Bugger! All possible values for square (%i,%i) fail" \
                             % (row,col)
-        #print "Two level supposition done"
+        ##print "Two level supposition done"
 
 if __name__ == "__main__" and RUN_BUILT_IN_TESTS :
-    print "Running built in tests..."
+    #print "Running built in tests..."
 
     tests = []
 
@@ -595,7 +595,7 @@ if __name__ == "__main__" and RUN_BUILT_IN_TESTS :
 
     for test in tests :
         name = test[0]
-        print "Running test: " + name
+        #print "Running test: " + name
 
         x = sudoku(test[1])
 
@@ -605,26 +605,26 @@ if __name__ == "__main__" and RUN_BUILT_IN_TESTS :
         assert x.as_test_list() == test[2], "Simple check failed"
 
         if test[3] is not None and not x.solved() :
-            if test[3] <> test[2]: print "Overlapping (aka slicing and dicing) should helps"
+            #if test[3] <> test[2]: print "Overlapping (aka slicing and dicing) should helps"
             x.overlapping_3x3_and_row_or_col()
             #x.check()
             assert x.as_test_list() == test[3], "Overlapping failed"
 
         if test[4] is not None and not x.solved() :
-            if test[4] <> test[3]: print "One level supposition helps"
+            #if test[4] <> test[3]: print "One level supposition helps"
             x.one_level_supposition()
             #x.check()
             assert x.as_test_list() == test[4], "One level supposition failed"
 
         if test[5] is not None and not x.solved() :
-            if test[5] <> test[4]: print "Two level supposition helps"
+            #if test[5] <> test[4]: print "Two level supposition helps"
             x.two_level_supposition()
             #x.check()
             assert x.as_test_list() == test[5], "Two level supposition failed"
-    print "Builtin tests passed"
+    #print "Builtin tests passed"
 
 if __name__ == "__main__" and RUN_TEST_FILES :
-    print "Running test files"
+    #print "Running test files"
     #Using only check() and one_level_suposition(), completes 82 out of 95 in this test file, http://magictour.free.fr/top95
     import os
     import time
@@ -633,7 +633,7 @@ if __name__ == "__main__" and RUN_TEST_FILES :
             #Try without the extension...
             test_file = test_file[:-4]
         if os.path.isfile(test_file) :
-            print "Running tests from file %s" % test_file
+            #print "Running tests from file %s" % test_file
             input_file = open(test_file, "r")
             score = 0
             count = 0
@@ -650,7 +650,7 @@ if __name__ == "__main__" and RUN_TEST_FILES :
                     line = line[:-1]
                 if len(line)==81 :
                     count=count+1
-                    print "%i - [%s]" % (count, line),
+                    #print "%i - [%s]" % (count, line),
                     x = sudoku(line)
                     x.check(level=2)
                     #x.overlapping_3x3_and_row_or_col()
@@ -658,22 +658,22 @@ if __name__ == "__main__" and RUN_TEST_FILES :
                     #x.one_level_supposition()
                     #x.check()
                     if not x.solved() :
-                        print "Trying level two",
+                        #print "Trying level two",
                         #x.two_level_supposition()
                         x.check(level=3)
                     if x.solved() :
-                        print " - Done"
+                        #print " - Done"
                         score=score+1
                     else :
                         print "- Failed"
-                        print x.as_test_list()
+                        #print x.as_test_list()
                 else :
                     print "Bad line:\n%s" % line
             job_time = time.time()-start_time
             input_file.close()
-            print "Score %i / %i in %0.2f seconds" % (score,count,job_time)
+            #print "Score %i / %i in %0.2f seconds" % (score,count,job_time)
         else :
-            print "Could not find test file " + test_file
+            print ""
 
 if __name__ == "__main__" :
     print "Running demonstration..."
@@ -702,5 +702,5 @@ if __name__ == "__main__" :
 
     print "supposition:"
     t.check(level=2)
-    #print t.as_test_list()
+    ##print t.as_test_list()
     print t
