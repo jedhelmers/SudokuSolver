@@ -1,5 +1,5 @@
 # Welcome to the Sudoku Solver project
-======
+
 ## The Rundown
 Sudoku Solver allows a user to snap a picture of a particularly challenging sudoku puzzle and get the puzzle key almost instantly.
 
